@@ -16,9 +16,10 @@ def simulated_annealing(initial_state, adj_matrix, initial_T = 1000):
     current_state = initial_state
     T = initial_T
     iters = 0
-    T *= 0.99
-    while T >= 1e-14:
+    while True:
         T *= 0.99
+        if T < 1e-14:
+            return current_state, iters
         next_state = random_swap(current_state)
         delta = tour_cost(current_state, adj_matrix) - tour_cost(next_state, adj_matrix)
         if delta > 0:
@@ -27,6 +28,3 @@ def simulated_annealing(initial_state, adj_matrix, initial_T = 1000):
             if np.random.rand() < np.exp(delta/T):
                 current_state = next_state
         iters += 1
-
-    return current_state, iters
-    
